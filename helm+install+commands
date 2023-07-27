@@ -1,57 +1,41 @@
 helm repo list
-
 helm repo add bitnami https://charts.bitnami.com/bitnami
-
-helm repo list
-
 helm repo remove bitnami
-
-helm repo add bitnami https://charts.bitnami.com/bitnami
-
+-----------------------------------------
 
 Search the repository:
 
 helm search repo mysql
-
 helm search repo database
-
 helm search repo database --versions
 
-
+--------------------------------------------------------
 Install a package:
-
-kubectl get pods
-
-(Below Two commands - In a Different Shell/Commandline window/tab)
-
-minikube ssh
-
-docker images
 
 helm install mydb bitnami/mysql
 
 Check the cluster:
+    kubectl get pods
 
-kubectl get pods
-
-minikube ssh
-
-docker images
-
-To check the installation status:
+- To install with user define password we have two methods
+1. helm install mydb bitnami/mysql --set auth.rootPassword = "password"
+2. helm install mydb bitnami/mysql --values /path-to-file/values.yaml  -- here store the password in values.yaml file
 
 helm status mydb
-
-
+helm uninstall mysql-release
 
 --------------------------------------------
 
 To Upgrade:
 
+helm repo update --Will update the repo if any update is there
+
+--To update mysql we always need the root password so to get root password you can use below command
 ROOT_PASSWORD=$(kubectl get secret --namespace default mydb-mysql -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
 
-helm upgrade --namespace default mysql-release bitnami/mysql --set auth.rootPassword=$ROOT_PASSWORD
-
+- Now we have 2 ways to upgrade the db  // if we are upgrading in default namespace then namespace is optional as it will upgrade by default in default namespace
+1. helm upgrade --namespace default mysql-release bitnami/mysql --set auth.rootPassword=$ROOT_PASSWORD
+2. helm upgrade --namespace default mydb bitnami/mysql --values /path-to-file/values.yaml
+3, helm upgrade --namespace default mydb bitnami/mysql --reuse-values
 -------
 
-helm uninstall mysql-release
