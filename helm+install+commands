@@ -1,3 +1,10 @@
+helm install apache bitnami/apache -namespace=web
+helm upgrade apache bitnami/apache -namespace=web
+hlem rollback apache 1 -namespace=web
+helm uninstall apache
+==========================================================================================
+
+
 helm repo list
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo remove bitnami
