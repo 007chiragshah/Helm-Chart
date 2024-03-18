@@ -1,48 +1,54 @@
-helm install apache bitnami/apache -namespace=web
-helm upgrade apache bitnami/apache -namespace=web
-hlem rollback apache 1 -namespace=web
-helm uninstall apache
-==========================================================================================
-
+Install the helm and minikube and kubectl to work with helm
 
 helm repo list
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm repo remove bitnami
------------------------------------------
+helm repo add bitnami https://charts.bitnami.com/bitnami  (here bitnami is the name of repo, you can give any)
+helm repo remove bitnami (To remove repo)
+==========================================================================================
 
 Search the repository:
 
 helm search repo mysql
 helm search repo database
-helm search repo database --versions
+helm search repo database --versions (For all the versions)
+==========================================================================================
 
---------------------------------------------------------
-Install a package:
+helm install mydb bitnami/mysql    -- it will install mysql in default namespace
 
-helm install mydb bitnami/mysql
+Note: you cannot install 2 packages with same name as it will give an error
 
-Check the cluster:
-    kubectl get pods
+kubectl create ns testing    ---- Creating another namespace named testing, you can also use namespace instead of ns
+helm install mydb bitnami/mysql -namespace testing  ----- It will create mydb in testing namespace, you can also use 'n' instead of 'namespace'
 
-- To install with user define password we have two methods
-1. helm install mydb bitnami/mysql --set auth.rootPassword = "password"
-2. helm install mydb bitnami/mysql --values /path-to-file/values.yaml  -- here store the password in values.yaml file
+==========================================================================================
 
-helm status mydb
-helm uninstall mysql-release
+helm list  --- It will list all the packages from default namespace
+helm list -n testing  --- to get list from required namespace we need to use -n/-namespace 
 
---------------------------------------------
+==========================================================================================
+
+helm uninstall mydb   --- To uninstall package named mydb, if will do from default namespace
+helm uninstall mydb -n testing  --- To uninstall package named mydb from required namespace which is testing in this case
+
+==========================================================================================
+
+Custom value and file
+helm install mydb bitnami/mysql --set auth.rootPassword = test1234   -- to set the custome password for the mysql
+helm install mydb bitnami/mysql --values /PathToFile/values.yaml     -- by using file
+
+==========================================================================================
 
 To Upgrade:
 
-helm repo update --Will update the repo if any update is there
+helm repo update -- Will fetch all the latest upgrade to local if any
+helm status mydb  -- To check the upgrade command 
 
 --To update mysql we always need the root password so to get root password you can use below command
 ROOT_PASSWORD=$(kubectl get secret --namespace default mydb-mysql -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
 
 - Now we have 2 ways to upgrade the db  // if we are upgrading in default namespace then namespace is optional as it will upgrade by default in default namespace
-1. helm upgrade --namespace default mysql-release bitnami/mysql --set auth.rootPassword=$ROOT_PASSWORD
+1. helm upgrade mysql-release bitnami/mysql --set auth.rootPassword=$ROOT_PASSWORD
 2. helm upgrade --namespace default mydb bitnami/mysql --values /path-to-file/values.yaml
 3, helm upgrade --namespace default mydb bitnami/mysql --reuse-values
+4. helm upgrade mysql-release bitnami/mysql   --- It will do upgrade with default configuration which we have setted during installation
 -------
 
