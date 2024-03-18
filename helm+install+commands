@@ -41,14 +41,16 @@ To Upgrade:
 
 helm repo update -- Will fetch all the latest upgrade to local if any
 helm status mydb  -- To check the upgrade command 
+helm upgrade mydb bitnami/mysql  --- This will update the mysql service with default update in default namespace
+helm upgrade mydb bitnami/mysql -n testing --values values.yaml    --- This will update the mysql with custom values in given namespace
+helm upgrade mysb bitnami/mysql --reuse-values  --To reuse the earlier setted values not the default one
 
---To update mysql we always need the root password so to get root password you can use below command
-ROOT_PASSWORD=$(kubectl get secret --namespace default mydb-mysql -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
+==========================================================================================
+Dry-run
 
-- Now we have 2 ways to upgrade the db  // if we are upgrading in default namespace then namespace is optional as it will upgrade by default in default namespace
-1. helm upgrade mysql-release bitnami/mysql --set auth.rootPassword=$ROOT_PASSWORD
-2. helm upgrade --namespace default mydb bitnami/mysql --values /path-to-file/values.yaml
-3, helm upgrade --namespace default mydb bitnami/mysql --reuse-values
-4. helm upgrade mysql-release bitnami/mysql   --- It will do upgrade with default configuration which we have setted during installation
--------
+helm install mydb bitnami/mysql --values values.yaml --dry-run
+==========================================================================================
+template 
 
+ helm install mydb bitnami/mysql template
+==========================================================================================
