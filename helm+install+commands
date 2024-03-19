@@ -3,14 +3,14 @@ Install the helm and minikube and kubectl to work with helm
 helm repo list
 helm repo add bitnami https://charts.bitnami.com/bitnami  (here bitnami is the name of repo, you can give any)
 helm repo remove bitnami (To remove repo)
-==========================================================================================
+====================================================================================================================================================================================
 
 Search the repository:
 
 helm search repo mysql
 helm search repo database
 helm search repo database --versions (For all the versions)
-==========================================================================================
+====================================================================================================================================================================================
 
 helm install mydb bitnami/mysql    -- it will install mysql in default namespace
 
@@ -19,23 +19,23 @@ Note: you cannot install 2 packages with same name as it will give an error
 kubectl create ns testing    ---- Creating another namespace named testing, you can also use namespace instead of ns
 helm install mydb bitnami/mysql -namespace testing  ----- It will create mydb in testing namespace, you can also use 'n' instead of 'namespace'
 
-==========================================================================================
+====================================================================================================================================================================================
 
 helm list  --- It will list all the packages from default namespace
 helm list -n testing  --- to get list from required namespace we need to use -n/-namespace 
 
-==========================================================================================
+====================================================================================================================================================================================
 
 helm uninstall mydb   --- To uninstall package named mydb, if will do from default namespace
 helm uninstall mydb -n testing  --- To uninstall package named mydb from required namespace which is testing in this case
 
-==========================================================================================
+====================================================================================================================================================================================
 
 Custom value and file
 helm install mydb bitnami/mysql --set auth.rootPassword = test1234   -- to set the custome password for the mysql
 helm install mydb bitnami/mysql --values /PathToFile/values.yaml     -- by using file
 
-==========================================================================================
+====================================================================================================================================================================================
 
 To Upgrade:
 
@@ -45,12 +45,67 @@ helm upgrade mydb bitnami/mysql  --- This will update the mysql service with def
 helm upgrade mydb bitnami/mysql -n testing --values values.yaml    --- This will update the mysql with custom values in given namespace
 helm upgrade mysb bitnami/mysql --reuse-values  --To reuse the earlier setted values not the default one
 
-==========================================================================================
+====================================================================================================================================================================================
 Dry-run
 
 helm install mydb bitnami/mysql --values values.yaml --dry-run
-==========================================================================================
+====================================================================================================================================================================================
 template 
 
  helm install mydb bitnami/mysql template
-==========================================================================================
+====================================================================================================================================================================================
+helm get
+
+#with helm ls command we are getting minimal information, but with helm get we will all the infor we need 
+
+helm get notes mydb  ---- it will get the release notes for the packge mydb
+helm get values mydb  ---- it will get the all the custom values we have used
+helm get values mydb --all   ----- it will get all the custom and default values
+helm get values mydb --revision 1  -- It will get the values which we used in revision 1 (during installation)
+
+====================================================================================================================================================================================
+History
+
+helm history mydb   --- To get the history of this package
+
+#Note: If the update or installation failed it saves in history
+
+Rollback
+helm rollback mydb 1  --- Here 1 is shows the version number you want to rollback
+====================================================================================================================================================================================
+
+Uninstall
+
+helm uninstall mydb    --- To uninstall the package, it will remove all the things like package, services, secretes etc
+helm uninstall mydb --keep-history  --- To keep the history (in secret) after the uninstallation 
+====================================================================================================================================================================================
+
+Create namespace
+
+helm install web bitnami/apache -n=test --create-namespace   ---To install package in perticular namespace with creating it in single command
+====================================================================================================================================================================================
+
+Upgrade and install
+
+helm upgrade --install myweb bitnami/apache   ---This will check if package is installed then it will upgrade and if it is not then it will install it first.
+====================================================================================================================================================================================
+
+Generate relase name
+
+helm install bitnami/apache --generate-name --- It will auto generate the name of the package
+helm install bitnami/apache --generate-name --name-template "webserver-{{ randNum 7| lower}}"     ----Generate the name with given template
+
+#Note -- It will not support the upper case as it will give an error
+====================================================================================================================================================================================
+
+Wait and Timeout
+
+helm install web bitnami/apache --wait   --- IT will bydefault wait till 5 min and if package will not came up it will mark as failure
+helm install web bitnami/apache --wait --timeout 5m10s  --IT will use to give manual wait time
+====================================================================================================================================================================================
+
+Atomic Install
+
+helm install web bitnami/apache --atomic   --- IT will bydefault wait (--wait by default enabled) till 5 min and if package will not came up it will rollback it to previous version
+helm install web bitnami/apache --atomic --timeout 5m10s  --IT will use to give manual wait time
+====================================================================================================================================================================================
