@@ -109,3 +109,16 @@ Atomic Install
 helm install web bitnami/apache --atomic   --- IT will bydefault wait (--wait by default enabled) till 5 min and if package will not came up it will rollback it to previous version
 helm install web bitnami/apache --atomic --timeout 5m10s  --IT will use to give manual wait time
 ====================================================================================================================================================================================
+
+Force upgrade and cleanup
+
+helm install web bitnami/apache --force     --- To restart all the pods forcefully use this command
+helm install web bitnami/apache --cleanup-on-failure  ---- To cleanup all the things configmap, secret etc if installation got failed
+====================================================================================================================================================================================
+
+Chart Creation/installation
+
+helm create firstchart ---- To create the chart, here firstchart is the name of the chart.
+helm install firstapp firstchart  ---- To install the chart, by default it will install the nginx, here firstapp is the app name which can be anything
+
+
