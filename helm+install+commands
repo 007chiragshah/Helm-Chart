@@ -120,5 +120,19 @@ Chart Creation/installation
 
 helm create firstchart ---- To create the chart, here firstchart is the name of the chart.
 helm install firstapp firstchart  ---- To install the chart, by default it will install the nginx, here firstapp is the app name which can be anything
+====================================================================================================================================================================================
 
+Helm package
 
+helm package firstchart --dependecies-update   ---- To install the package with dependecies
+or
+helm package firstchart -u   ---- To install the package with dependecies
+
+helm package firstchart -d path_to_save    ---- To save the package on different location
+or
+helm package firstchart --destination  path_to_save   ---- To save the package on different location
+====================================================================================================================================================================================
+
+helm lint
+
+helm lint firstchart   --- To validate the chart as is there any error or something
