@@ -136,3 +136,15 @@ helm package firstchart --destination  path_to_save   ---- To save the package o
 helm lint
 
 helm lint firstchart   --- To validate the chart as is there any error or something
+====================================================================================================================================================================================
+template 
+
+helm template firstchart  ---To check the template how it looks like and also for the syntactical error check
+====================================================================================================================================================================================
+
+get manifest
+
+helm get manifest chart_name/package_name    ----To get the manifest file which was used during installation or upgradation
+====================================================================================================================================================================================
+
+
