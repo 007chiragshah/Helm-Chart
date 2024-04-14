@@ -147,4 +147,10 @@ get manifest
 helm get manifest chart_name/package_name    ----To get the manifest file which was used during installation or upgradation
 ====================================================================================================================================================================================
 
+update chart dependency
+
+helm dependency update firstchart  --- To update the chart dependency
+====================================================================================================================================================================================
+
+
 
